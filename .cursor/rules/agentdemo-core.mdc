@@ -1,0 +1,14 @@
+---
+description: AgentDemo 项目核心约束与文档入口（Vibe Coding）
+alwaysApply: true
+---
+
+# AgentDemo Core
+
+- 宿主工程：`D:\UEProject\AgentDemo`（UE 5.8）。玩法是统一单项目，不是多个 Demo 工程。
+- 先读再改：`AGENTS.md` → `Docs/策划案/06_统一项目GDD.md` → 当前模块 `01`～`05`。
+- 按垂直切片推进（VS0→VS7），一次会话只做一个 VS 或一个验收项。
+- 任务必须带：目标、范围、依据文档章节、验收、不要做。
+- 主线代码放 `Source/AgentDemo/<Domain>/`；不要往 `Variant_TwinStick` / `Variant_Strategy` 堆主线。
+- 权威在 Server；跨模块走 GDD 接口；内容 Id 先入 Registry。
+- 不扩需求、不大重构、不写用户没要的文档。

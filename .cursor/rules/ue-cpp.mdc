@@ -1,0 +1,14 @@
+---
+description: AgentDemo UE C++ 实现约定
+globs: Source/AgentDemo/**/*.{h,cpp}
+alwaysApply: false
+---
+
+# UE C++
+
+- 逻辑 C++，蓝图做表现与数据资产配置。
+- 命名：`AAgent*` / `UAgent*` / `FAgent*`（或模块前缀如 `UQuest*`）；日志用 `LogAgentDemo`。
+- 复制与权威：改背包/伤害/接交任务/购买只在 Server；Client 发意图 RPC。
+- 生成头最后包含；新类放对应域目录；`Build.cs` 按需加模块依赖。
+- 优先最小可编译骨架 → 接数据 → 接 UI；不要一次 PR 塞满整个 VS。
+- 模板变体代码可参考，主线不要继承 TwinStick 业务类除非明确复用。

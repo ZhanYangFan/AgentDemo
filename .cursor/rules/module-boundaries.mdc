@@ -1,0 +1,18 @@
+---
+description: 模块边界与目录所有权（对齐统一 GDD）
+globs: Source/AgentDemo/**/*
+alwaysApply: false
+---
+
+# Module Boundaries
+
+| 目录 | 文档 | 禁止 |
+|------|------|------|
+| AbilitySystem/ | 01 | 写任务进度 |
+| AI/ | 02 | 绕过 GA 直接改玩法血量（临时 stub 除外） |
+| Inventory/ Equipment/ Craft/ | 03 | UI 直接改数量 |
+| Quest/ Agent/ Dialogue/ | 04 | 直接 Spawn 装备（走 RewardService） |
+| Commerce/ Guild/ SDK/ | 05 | 另起货币系统 |
+| Persist/ | GDD §10 | 掺业务规则 |
+
+跨系统只用约定接口：`IQuestWorldSink`、`IRewardService`、装备→AbilitySet、BT→ActivateAbilityByTag。

@@ -1,0 +1,23 @@
+# UE 生成物
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+*.sln
+*.slnx
+*.user
+*.suo
+*.opensdf
+*.sdf
+
+# 编辑器/IDE
+.vs/
+.idea/
+.vscode/
+.vsconfig
+
+# 引擎生成
+Content/Developers/
+
+# 本地配置（含密钥/本地路径）
+*.DotSettings.user
