@@ -18,9 +18,9 @@ class AGENTDEMO_API UAgentGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	/** 发起登录（Mock） */
+	/** 发起登录（Mock），Account 为输入的账号名 */
 	UFUNCTION(BlueprintCallable, Category = "Lobby")
-	void Login();
+	void Login(const FString& Account);
 
 	/** 是否已登录 */
 	UFUNCTION(BlueprintPure, Category = "Lobby")

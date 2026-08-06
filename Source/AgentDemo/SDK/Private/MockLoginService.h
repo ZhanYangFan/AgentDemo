@@ -7,7 +7,7 @@
 #include "MockLoginService.generated.h"
 
 /**
- * Mock 登录服务：模拟登录成功（账号名 "Mock_Player"），无真实 SDK。
+ * Mock 登录服务：模拟登录成功，回显输入的账号名，无真实 SDK。
  * VS6 替换为真 SDK 实现。
  */
 UCLASS()
@@ -16,7 +16,7 @@ class UMockLoginService : public UObject, public ILoginService
 	GENERATED_BODY()
 
 public:
-	virtual void Login(const FString& Platform, TFunction<void(bool bSuccess, const FString& DisplayName)> OnDone) override;
+	virtual void Login(const FString& Platform, const FString& Account, TFunction<void(bool bSuccess, const FString& DisplayName)> OnDone) override;
 	virtual bool IsLoggedIn() const override;
 	virtual FString GetDisplayName() const override;
 

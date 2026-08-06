@@ -23,13 +23,17 @@
 - **基础玩法框架已完成**（第三人称 WASD + 八方向动画，C++ 逻辑 + 蓝图数据配置层）：
   ```
   Source/AgentDemo/
-    Core/       ← AgentGameMode / AgentGameState / AgentPlayerState / AgentHUD（C++ 框架类）
+    Core/       ← AgentGameMode / AgentGameState / AgentPlayerState / AgentHUD / AgentGameInstance / AgentLobbyGameMode / AgentLobbyWidget
     Character/  ← AgentCharacter（第三人称 SpringArm 相机 + 八方向旋转策略）
     Player/     ← AgentPlayerController（WASD/走跑跳/鼠标视角）
+    SDK/        ← ILoginService + MockLoginService（05 §9 接口 + Mock，登录回显输入账号名）
+    UI/         ← AgentUIManagerSubsystem（GameInstanceSubsystem，统一管理全局 UI 与输入模式）
   ```
-  蓝图数据配置层：`BP_AgentGameMode`（类装配）/ `BP_AgentCharacter`（Mesh+动画）/ `BP_AgentPlayerController`（输入资产引用）
+  蓝图数据配置层：`BP_AgentGameMode`（类装配）/ `BP_AgentCharacter`（Mesh+动画）/ `BP_AgentPlayerController`（输入资产引用）/ `BP_AgentLobbyGameMode`（指 LobbyWidgetClass）
   输入资产：`/Game/Input/`（IMC_AgentDefault + IA_Move/Look/Jump/Sprint，A/S 用 Negate+Swizzle 修饰符）
-  默认地图 `M_Town_Dev`（/Game/Maps/），GameMode 为 `BP_AgentGameMode`
+  地图：`M_Frontend`（大厅，**启动默认图**，GameMode Override=BP_AgentLobbyGameMode）→ 点「进入游戏」切 `M_Town_Dev`（小镇）；`GameInstanceClass=AgentGameInstance` 已在 ini 注册
+- **VS0 大厅壳已完成**（2026-08-06）：两态登录 UI（未登录=账号/密码/登入，已登录=欢迎+进入游戏，`WBP_LobbyMain` 继承 `UAgentLobbyWidget`，WidgetSwitcher 切页，BindWidget 契约 8 个控件名）；Mock 登录不校验密码
+- **UI 输入模式架构**：一律经 `UAgentUIManagerSubsystem`（`OpenGlobalUI`/`CloseGlobalUI`）；游戏默认 `GameOnly`，全局 UI 打开用 **`GameAndUI`（禁止 UIOnly**，除非真要屏蔽游戏输入的模态）；PC/GameMode/Widget 都不得自行 SetInputMode
 - **Mannequin 资产链**（勿混淆）：`SKM_Manny_Simple`/`SKM_Quinn_Simple` 是**网格**（USkeletalMesh），`SK_Mannequin` 是**骨架**（USkeleton），`ABP_Unarmed` 是动画蓝图
 - **八方向动画**：`BS_Idle_Walk_Run`（2D BlendSpace：X=方向 -180~180° 八采样、Y=速度 0/300/600）由 `ABP_Unarmed` 的 BlueprintUpdateAnimation **自驱动**（Direction/GroundSpeed/ShouldMove/IsFalling）；角色 `bUseControllerRotationYaw=true` + `bOrientRotationToMovement=false` 走完整八方向分支，C++ 不驱动动画变量
 - **UE 行为坑**：LiveCoding 修改 C++ 默认值后**蓝图 CDO 不自动继承**（固化旧快照），须在蓝图 CDO 显式配置；动画蓝图图不能用 `read_graph_dsl` 读取（返回空≠图空），诊断用 `find_nodes`/`get_connected_subgraph`
@@ -66,6 +70,7 @@
 - **内容 Id 必须进 Registry 白名单**后再引用
 - **不扩需求**、不写无关文档、不擅自大重构
 - **垂直切片**：一次只做一个 VS 的验收项，不要横向堆半成品
+- **不做 PIE 自动化测试**：实现完成后给出验收清单交用户手动测试；Agent 不启动 PIE、不模拟输入、不截图自验（LiveCoding 编译 + WBP 编译等静态验证可以做）
 
 ---
 

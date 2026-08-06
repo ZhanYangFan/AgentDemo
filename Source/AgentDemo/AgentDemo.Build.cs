@@ -16,7 +16,8 @@ public class AgentDemo : ModuleRules
 			"EnhancedInput",
 			"GameplayCameras",
 			"UMG",
-			"Slate"
+			"Slate",
+			"SlateCore"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
@@ -26,7 +27,8 @@ public class AgentDemo : ModuleRules
 			"AgentDemo/Core/Public",
 			"AgentDemo/Character/Public",
 			"AgentDemo/Player/Public",
-			"AgentDemo/SDK/Public"
+			"AgentDemo/SDK/Public",
+			"AgentDemo/UI/Public"
 		});
 
 		// SDK 内部实现（Mock 服务等）仅供模块内引用

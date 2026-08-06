@@ -3,7 +3,9 @@
 #include "AgentLobbyGameMode.h"
 
 #include "AgentLobbyWidget.h"
+#include "AgentUIManagerSubsystem.h"
 #include "Blueprint/UserWidget.h"
+#include "Engine/GameInstance.h"
 
 AAgentLobbyGameMode::AAgentLobbyGameMode()
 {
@@ -15,12 +17,9 @@ void AAgentLobbyGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (LobbyWidgetClass)
+	// 经 UI 管理器打开大厅主界面（输入模式由 Manager 统一接管）
+	if (UAgentUIManagerSubsystem* UIManager = GetWorld()->GetGameInstance()->GetSubsystem<UAgentUIManagerSubsystem>())
 	{
-		LobbyWidget = CreateWidget<UAgentLobbyWidget>(GetWorld(), LobbyWidgetClass);
-		if (LobbyWidget)
-		{
-			LobbyWidget->AddToViewport(0);
-		}
+		LobbyWidget = Cast<UAgentLobbyWidget>(UIManager->OpenGlobalUI(LobbyWidgetClass));
 	}
 }

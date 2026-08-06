@@ -21,8 +21,8 @@ class AGENTDEMO_API ILoginService
 	GENERATED_BODY()
 
 public:
-	/** 发起登录（Platform 如 "QQ"/"WeChat"/"Mock"）。成功回调 bSuccess + 账号显示名。 */
-	virtual void Login(const FString& Platform, TFunction<void(bool bSuccess, const FString& DisplayName)> OnDone) = 0;
+	/** 发起登录（Platform 渠道如 "QQ"/"WeChat"/"Mock"；Account 为输入的账号名）。成功回调 bSuccess + 账号显示名。 */
+	virtual void Login(const FString& Platform, const FString& Account, TFunction<void(bool bSuccess, const FString& DisplayName)> OnDone) = 0;
 
 	/** 是否已登录 */
 	virtual bool IsLoggedIn() const = 0;

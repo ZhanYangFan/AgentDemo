@@ -6,9 +6,15 @@
 #include "Blueprint/UserWidget.h"
 #include "AgentLobbyWidget.generated.h"
 
+class UTextBlock;
+class UButton;
+class UWidgetSwitcher;
+class UEditableTextBox;
+
 /**
  * 大厅主界面基类：登录 + 进入游戏（逻辑在 C++，布局由 WBP 蓝图数据配置）。
- * WBP_LobbyMain 继承此类，按钮事件调用 TryLogin/EnterFrontier。
+ * WBP_LobbyMain 继承此类。未登录/已登录两态由 StateSwitcher 切换：
+ * Child 0 = 登录面板，Child 1 = 已登录面板。
  */
 UCLASS()
 class AGENTDEMO_API UAgentLobbyWidget : public UUserWidget
@@ -16,7 +22,9 @@ class AGENTDEMO_API UAgentLobbyWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	/** 点击「登录」：发起 Mock 登录并刷新登录状态显示 */
+	virtual void NativeConstruct() override;
+
+	/** 点击「登入」：读取账号输入，发起 Mock 登录并刷新界面 */
 	UFUNCTION(BlueprintCallable, Category = "Lobby")
 	void TryLogin();
 
@@ -24,11 +32,52 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Lobby")
 	void EnterFrontier();
 
-	/** 登录状态变化时通知蓝图（刷新账号名文本等） */
-	UFUNCTION(BlueprintImplementableEvent, Category = "Lobby")
-	void OnLoginStateChanged(const FString& DisplayName);
-
 protected:
-	/** 刷新登录状态（调用 OnLoginStateChanged） */
+	/** 按 GameInstance 登录态直刷界面（切面板、状态标签、欢迎文本） */
 	void RefreshLoginState();
+
+	// ---- 公共区（两态共享） ----
+
+	/** 顶部标题 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> TitleText;
+
+	/** 右上角状态标签（未登录 / ✓已登录 / 请输入账号） */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> LoginStatusText;
+
+	/** 两态切换器：Child 0 = 登录面板，Child 1 = 已登录面板 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UWidgetSwitcher> StateSwitcher;
+
+	// ---- 未登录面板 ----
+
+	/** 账号输入框 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UEditableTextBox> AccountInput;
+
+	/** 密码输入框（Mock 不校验，仅保留交互） */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UEditableTextBox> PasswordInput;
+
+	/** 「登入」按钮 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> LoginButton;
+
+	// ---- 已登录面板 ----
+
+	/** 欢迎文本（欢迎回来，{账号}） */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> WelcomeText;
+
+	/** 「进入游戏」按钮 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> EnterGameButton;
+
+private:
+	UFUNCTION()
+	void HandleLoginClicked();
+
+	UFUNCTION()
+	void HandleEnterGameClicked();
 };
